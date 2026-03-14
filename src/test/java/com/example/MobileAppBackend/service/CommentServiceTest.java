@@ -57,8 +57,10 @@ class CommentServiceTest {
 
     @Test
     void createComment_success() {
+        mockAuthenticatedUser("u1");
         CreateCommentRequest req = new CreateCommentRequest();
         req.setText("hello");
+        req.setAuthorId("u1");
 
         Comment mapped = new Comment();
         mapped.setText("hello");

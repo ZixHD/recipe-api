@@ -30,6 +30,7 @@ public class CommentService {
         }
 
         Comment comment = modelMapper.map(createCommentRequest, Comment.class);
+        comment.setAuthorId(getCurrentUserId());
         log.debug("New comment created: {}", comment);
         log.info("New comment created");
         return commentRepository.save(comment);
