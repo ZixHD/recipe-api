@@ -15,6 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set lowercase image name
+        id: vars
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/recipe-api" >> $GITHUB_ENV
+
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
