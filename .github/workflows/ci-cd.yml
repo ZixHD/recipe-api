@@ -8,15 +8,12 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    outputs:
-      image: ghcr.io/${{ github.repository }}/recipe-api:${{ github.sha }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set image name
-        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/recipe-api" >> $GITHUB_ENV
+      - name: Set image name (LOWERCASE FIXED)
+        run: echo "IMAGE_NAME=ghcr.io/zixhd/recipe-api" >> $GITHUB_ENV
 
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -28,10 +25,11 @@ jobs:
             -t $IMAGE_NAME:latest \
             .
 
-      - name: Push image
+      - name: Push Docker image
         run: |
           docker push $IMAGE_NAME:${{ github.sha }}
           docker push $IMAGE_NAME:latest
+
 
   test:
     runs-on: ubuntu-latest
@@ -41,9 +39,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Create env file from secrets
         run: |
           cat <<EOF > .env
@@ -51,12 +46,12 @@ jobs:
           MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
           MONGO_URI=${{ secrets.MONGO_URI }}
           EOF
-      - name: Start services with Docker Compose
-        run: |
-          IMAGE=ghcr.io/${{ github.repository }}/recipe-api:${{ github.sha }} \
-          docker compose up -d
 
-      - name: Wait for app to start
+      - name: Start DEV services
+        run: |
+          docker compose -f docker-compose.dev.yml up -d --build
+
+      - name: Wait for app
         run: sleep 15
 
       - name: Health check
@@ -65,23 +60,24 @@ jobs:
 
       - name: Show logs if failed
         if: failure()
-        run: docker compose logs
+        run: docker compose -f docker-compose.dev.yml logs
 
       - name: Cleanup
-        run: docker compose down
+        run: docker compose -f docker-compose.dev.yml down
+
 
   deploy:
-    runs-on: [ self-hosted ]
+    runs-on: [self-hosted]
     needs: test
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy locally on runner
-        run: |
-          export COMPOSE_FILE=docker-compose.prod.yml
-          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Login to GHCR
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-          docker compose pull
-          docker compose up -d
+      - name: Deploy production stack
+        run: |
+          docker compose -f docker-compose.prod.yml pull
+          docker compose -f docker-compose.prod.yml up -d
