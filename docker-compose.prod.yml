@@ -1,0 +1,15 @@
+
+services:
+  backend:
+    image: ghcr.io/zixhd/recipe-api:latest
+    container_name: recipe-api
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+

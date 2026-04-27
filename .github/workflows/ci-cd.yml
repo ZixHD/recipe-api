@@ -80,8 +80,7 @@ jobs:
 
       - name: Deploy locally on runner
         run: |
-          cd /opt/recipe-api
-
+          export COMPOSE_FILE=docker-compose.prod.yml
           echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
           docker compose pull
