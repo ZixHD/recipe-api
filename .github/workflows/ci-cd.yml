@@ -15,20 +15,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set image name
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/recipe-api" >> $GITHUB_ENV
+
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker image
         run: |
           docker build \
-            -t ghcr.io/${{ github.repository }}/recipe-api:${{ github.sha }} \
-            -t ghcr.io/${{ github.repository }}/recipe-api:latest \
+            -t $IMAGE_NAME:${{ github.sha }} \
+            -t $IMAGE_NAME:latest \
             .
 
       - name: Push image
         run: |
-          docker push ghcr.io/${{ github.repository }}/recipe-api:${{ github.sha }}
-          docker push ghcr.io/${{ github.repository }}/recipe-api:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:latest
 
   test:
     runs-on: ubuntu-latest
