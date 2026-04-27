@@ -39,15 +39,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create env file from secrets
-        run: |
-          cat <<EOF > .env
-          MONGO_USERNAME=${{ secrets.MONGO_USERNAME }}
-          MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
-          MONGO_URI=${{ secrets.MONGO_URI }}
-          EOF
-
       - name: Start DEV services
+        env:
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: |
           docker compose -f docker-compose.dev.yml up -d --build
 
@@ -58,7 +54,7 @@ jobs:
         run: |
           curl --fail http://localhost:8080/health-check || exit 1
 
-      - name: Show logs if failed
+      - name: Logs on failure
         if: failure()
         run: docker compose -f docker-compose.dev.yml logs
 
@@ -67,7 +63,7 @@ jobs:
 
 
   deploy:
-    runs-on: [self-hosted]
+    runs-on: [ self-hosted ]
     needs: test
 
     steps:
@@ -77,15 +73,11 @@ jobs:
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Create env file
-        run: |
-          cat <<EOF > .env
-          MONGO_USERNAME=${{ secrets.MONGO_USERNAME }}
-          MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
-          MONGO_URI=${{ secrets.MONGO_URI }}
-          EOF
-
       - name: Deploy production stack
+        env:
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: |
           docker compose -f docker-compose.prod.yml pull
           docker compose -f docker-compose.prod.yml up -d

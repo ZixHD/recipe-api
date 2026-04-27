@@ -3,8 +3,10 @@ services:
   backend:
     image: ghcr.io/zixhd/recipe-api:latest
     container_name: recipe-api
-    env_file:
-      - .env
+    environment:
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_URI: ${MONGO_URI}
     ports:
       - "8080:8080"
   redis:
