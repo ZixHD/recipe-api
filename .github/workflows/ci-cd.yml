@@ -44,6 +44,13 @@ jobs:
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Create env file from secrets
+        run: |
+          cat <<EOF > .env
+          MONGO_USERNAME=${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
+          MONGO_URI=${{ secrets.MONGO_URI }}
+          EOF
       - name: Start services with Docker Compose
         run: |
           IMAGE=ghcr.io/${{ github.repository }}/recipe-api:${{ github.sha }} \
