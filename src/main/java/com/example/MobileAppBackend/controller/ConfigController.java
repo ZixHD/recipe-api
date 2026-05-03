@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/config")
 public class ConfigController {
 
-    @Value("${APP_VERSION")
+    @Value("${APP_VERSION:dev}")
     private String appVersion;
 
     @GetMapping("/health-check")
