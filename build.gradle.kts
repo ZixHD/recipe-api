@@ -45,6 +45,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito:mockito-core")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation ("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly ("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.named<Test>("test") {
