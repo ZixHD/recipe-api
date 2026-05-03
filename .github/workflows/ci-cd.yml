@@ -53,7 +53,7 @@ jobs:
 
       - name: Health check
         run: |
-          curl --fail http://localhost:8080/health-check || exit 1
+          curl --fail http://localhost:8080/config/health-check || exit 1
 
       - name: Logs on failure
         if: failure()
