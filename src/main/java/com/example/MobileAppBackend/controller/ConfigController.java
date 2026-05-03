@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/health-check")
+@RequestMapping("/config")
 public class ConfigController {
 
     @Value("${APP_VERSION")
     private String appVersion;
 
-    @GetMapping
+    @GetMapping("/health-check")
     public ResponseEntity<Map<String, String>> healthCheck() {
         return ResponseEntity.ok(
                 Map.of("status", "UP")

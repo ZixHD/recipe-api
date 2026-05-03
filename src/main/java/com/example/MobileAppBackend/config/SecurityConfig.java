@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(cors()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/client/register", "/health-check").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/client/register", "/config/*").permitAll()
                         .requestMatchers("/api/recipes/**").hasAnyRole("USER", "CLIENT")
 
                         // User-specific endpoints
