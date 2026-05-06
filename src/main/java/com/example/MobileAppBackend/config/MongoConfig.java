@@ -37,6 +37,7 @@ public class MongoConfig {
     @Bean
     public MongoClient mongoClient() {
 
+
         String activeProfile = Arrays.toString(environment.getActiveProfiles());
 
         boolean isTest = activeProfile.contains("test");
@@ -52,7 +53,14 @@ public class MongoConfig {
                 encodedPassword,
                 selectedHost
         );
-        log.info("uri: {}", uri);
+        log.info("=== MONGO DEBUG ===");
+        log.info("USERNAME: {}", username);
+        log.info("HOST: {}", host);
+        log.info("TEST HOST: {}", testHost);
+        log.info("ACTIVE PROFILES: {}", Arrays.toString(environment.getActiveProfiles()));
+        log.info("IS TEST: {}", isTest);
+        log.info("SELECTED HOST: {}", selectedHost);
+        log.info("===================");
         log.info("Connecting to MongoDB: {}", isTest ? "TEST DB" : "PROD DB");
 
         return MongoClients.create(uri);
