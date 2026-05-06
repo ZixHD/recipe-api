@@ -47,12 +47,12 @@ public class MongoConfig {
                 URLEncoder.encode(password, StandardCharsets.UTF_8);
 
         String uri = String.format(
-                "mongodb+srv://%s:%s@%s/?retryWrites=true&w=majority&appName=Cluster0",
+                "mongodb+srv://%s:%s@%s?retryWrites=true&w=majority&appName=Cluster0",
                 username,
                 encodedPassword,
                 selectedHost
         );
-
+        log.info("uri: {}", uri);
         log.info("Connecting to MongoDB: {}", isTest ? "TEST DB" : "PROD DB");
 
         return MongoClients.create(uri);

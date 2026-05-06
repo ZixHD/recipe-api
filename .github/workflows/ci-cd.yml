@@ -43,7 +43,6 @@ jobs:
 
       - name: Run tests
         env:
-          SPRING_PROFILES_ACTIVE: test
           MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           MONGO_URI: ${{ secrets.MONGO_TEST_URI  }}
