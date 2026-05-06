@@ -3,6 +3,9 @@ spring:
     redis:
       port: 6379
 
+  mongodb:
+   uri: ${MONGO_URI}
+
 management:
   endpoints:
     web:
