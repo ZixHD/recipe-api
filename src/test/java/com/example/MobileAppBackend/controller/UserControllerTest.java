@@ -43,6 +43,7 @@ class UserControllerTest {
     @Test
     void getAllUsers() throws Exception {
         User user = new User();
+
         user.setUsername("john");
 
         when(userService.findAll()).thenReturn(List.of(user));
