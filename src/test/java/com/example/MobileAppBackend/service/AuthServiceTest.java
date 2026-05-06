@@ -11,6 +11,7 @@ import com.example.MobileAppBackend.model.User;
 import com.example.MobileAppBackend.model.UserType;
 import com.example.MobileAppBackend.repository.UserRepository;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -45,7 +46,10 @@ class AuthServiceTest {
     @InjectMocks
     private AuthService authService;
 
-
+    @AfterEach
+    void cleanup() {
+        userRepository.deleteAll();
+    }
     @Test
     void register_success() {
         RegisterRequest req = new RegisterRequest();

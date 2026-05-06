@@ -7,7 +7,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -24,29 +23,13 @@ jobs:
           path: ~/.gradle/wrapper
           key: gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
-      - name: Start DEV services
-        env:
-          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
-          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          APP_VERSION: ${{ github.sha }}
-        run: docker compose -f docker-compose.dev.yml up -d --build
-
-      - name: Wait for app to be healthy
-        run: |
-          for i in $(seq 1 30); do
-            curl -sf http://localhost:8080/config/health-check && exit 0
-            echo "Attempt $i/30 — waiting…"
-            sleep 3
-          done
-          echo "App never became healthy" && exit 1
-
       - name: Run tests
         env:
+          SPRING_PROFILES_ACTIVE: test
           MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-          MONGO_URI: ${{ secrets.MONGO_TEST_URI  }}
-        run: SPRING_DATA_MONGODB_DATABASE=test ./gradlew test
+          MONGO_URI: ${{ secrets.MONGO_TEST_URI }}
+        run: ./gradlew test
 
       - name: Publish test report
         if: always()
@@ -54,15 +37,6 @@ jobs:
         with:
           name: test-report
           path: build/reports/tests/
-
-      - name: Logs on failure
-        if: failure()
-        run: docker compose -f docker-compose.dev.yml logs
-
-      - name: Cleanup
-        if: always()
-        run: docker compose -f docker-compose.dev.yml down -v
-
   build-and-push:
     runs-on: ubuntu-latest
     needs: test
