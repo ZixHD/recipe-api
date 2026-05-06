@@ -42,6 +42,10 @@ jobs:
           echo "App never became healthy" && exit 1
 
       - name: Run tests
+        env:
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: ./gradlew test
 
       - name: Publish test report
