@@ -16,9 +16,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
-
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
