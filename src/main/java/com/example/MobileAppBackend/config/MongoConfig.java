@@ -47,15 +47,22 @@ public class MongoConfig {
         String encodedPassword =
                 URLEncoder.encode(password, StandardCharsets.UTF_8);
 
-        String dbName = isTest ? "recipe-test" : "recipe-prod";
-
         String uri = String.format(
-                "mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority&appName=Cluster0",
+                "mongodb+srv://%s:%s@%s?retryWrites=true&w=majority&appName=Cluster0",
                 username,
                 encodedPassword,
-                selectedHost,
-                dbName
+                selectedHost
         );
+        log.info("=== MONGO DEBUG ===");
+        log.info("USERNAME: {}", username);
+        log.info("HOST: {}", host);
+        log.info("TEST HOST: {}", testHost);
+        log.info("ACTIVE PROFILES: {}", Arrays.toString(environment.getActiveProfiles()));
+        log.info("IS TEST: {}", isTest);
+        log.info("SELECTED HOST: {}", selectedHost);
+        log.info("===================");
+        log.info("Connecting to MongoDB: {}", isTest ? "TEST DB" : "PROD DB");
+
         return MongoClients.create(uri);
     }
 }
