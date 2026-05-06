@@ -45,7 +45,7 @@ jobs:
         env:
           MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_URI: ${{ secrets.MONGO_TEST_URI  }}
         run: ./gradlew test
 
       - name: Publish test report
