@@ -23,13 +23,14 @@ jobs:
           path: ~/.gradle/wrapper
           key: gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
-#      - name: Run tests
-#        env:
-#          SPRING_PROFILES_ACTIVE: test
-#          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
-#          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-#          MONGO_URI: ${{ secrets.MONGO_TEST_URI }}
-#        run: ./gradlew test
+      - name: Run tests
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_TEST_URI: ${{ secrets.MONGO_TEST_URI }}
+        run: ./gradlew test
 
       - name: Publish test report
         if: always()
@@ -71,7 +72,7 @@ jobs:
             ${{ steps.meta.outputs.image }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+#rollback na prethodnu verziju
   deploy:
     runs-on: [self-hosted]
     needs: build-and-push
@@ -95,6 +96,7 @@ jobs:
 
       - name: Deploy with zero-downtime rollout
         env:
+          SPRING_PROFILES_ACTIVE: prod
           MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
