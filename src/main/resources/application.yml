@@ -14,3 +14,14 @@ management:
   metrics:
     tags:
       application: recipe-api
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      slo:
+        http.server.requests: 100ms,500ms,1s,2s
+    enable:
+      jvm: true
+      process: true
+      logback: true
+      mongodb: true
+      redis: true

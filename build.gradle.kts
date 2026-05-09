@@ -46,6 +46,8 @@ dependencies {
     testImplementation("org.mockito:mockito-core")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation ("org.springframework.boot:spring-boot-starter-actuator")
+    implementation ("org.mongodb:mongodb-driver-core")
+    implementation ("org.springframework.data:spring-data-redis")
     runtimeOnly ("io.micrometer:micrometer-registry-prometheus")
 }
 
