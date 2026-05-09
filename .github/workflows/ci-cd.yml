@@ -108,7 +108,7 @@ jobs:
       - name: Smoke test production
         run: |
           for i in $(seq 1 15); do
-            curl -sf https://your-domain.com/config/health-check && exit 0
+            curl -sf https://your-domain.com/health-check && exit 0
             sleep 4
           done
           echo "Production health check failed" && exit 1
