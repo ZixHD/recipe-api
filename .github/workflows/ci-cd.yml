@@ -72,7 +72,7 @@ jobs:
             ${{ steps.meta.outputs.image }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-#rollback na prethodnu verziju
+
   deploy:
     runs-on: [self-hosted]
     needs: build-and-push
@@ -108,7 +108,7 @@ jobs:
       - name: Smoke test production
         run: |
           for i in $(seq 1 15); do
-            curl -sf http://localhost:8080/health && exit 0
+            curl -sf http://localhost:8080/config/health-check && exit 0
             sleep 4
           done
           echo "Production health check failed" && exit 1
