@@ -101,6 +101,8 @@ jobs:
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           APP_VERSION: ${{ github.sha }}
+          GRAFANA_USERNAME: ${{ secrets.GRAFANA_USERNAME }}
+          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
         run: docker compose -f docker-compose.prod.yml up -d --remove-orphans
 
       - name: Smoke test production
@@ -118,6 +120,8 @@ jobs:
           MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           APP_VERSION: ${{ github.event.before }}
+          GRAFANA_USERNAME: ${{ secrets.GRAFANA_USERNAME }}
+          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
         run: |
           echo "Rolling back to $APP_VERSION"
           docker compose -f docker-compose.prod.yml pull
