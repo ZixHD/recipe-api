@@ -4,6 +4,7 @@ services:
     image: ghcr.io/zixhd/recipe-api:latest
     container_name: recipe-api
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       MONGO_USERNAME: ${MONGO_USERNAME}
       MONGO_PASSWORD: ${MONGO_PASSWORD}
       MONGO_URI: ${MONGO_URI}
