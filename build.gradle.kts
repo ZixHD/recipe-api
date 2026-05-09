@@ -45,10 +45,16 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito:mockito-core")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation ("org.springframework.boot:spring-boot-starter-actuator")
-    implementation ("org.mongodb:mongodb-driver-core")
-    implementation ("org.springframework.data:spring-data-redis")
-    runtimeOnly ("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    // Metrics
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    // MongoDB Metrics
+    implementation("org.mongodb:mongodb-driver-core")
+    implementation("org.mongodb:mongodb-driver-sync")
+    // Redis Metrics
+    implementation("org.springframework.data:spring-data-redis")
+    implementation("io.lettuce:lettuce-core")
 }
 
 tasks.named<Test>("test") {
